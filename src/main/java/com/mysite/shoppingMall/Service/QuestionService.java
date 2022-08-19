@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class QuestionService {
     public void doWrite(String subject, String content, HttpSession session){
         IsLogined isLogined = Ut.isLogined(session);
         MallUser mallUser = userRepository.findById(isLogined.getUserId()).get();
+
         Question q = new Question();
         q.setSubject(subject);
         q.setContent(content);
@@ -44,5 +46,11 @@ public class QuestionService {
         this.questionRepository.save(q);
     }
 
+    public Question getQuestion(Integer id) {
+        Optional<Question> question = this.questionRepository.findById(id);
+
+            return question.orElse(null);
+
+    }
 
 }

@@ -38,10 +38,12 @@ public class QuestionController {
         if(bindingResult.hasErrors()){
             return "QnA/write.html";
         }
+
         this.questionService.doWrite(questionForm.getSubject(), questionForm.getContent(), session);
 
         return "redirect:/question/list";
     }
+
 
 
     //R 읽기 ==============================================
@@ -54,13 +56,11 @@ public class QuestionController {
     }
 
 
-    @RequestMapping("/detail") // 단건조회
-    @ResponseBody
-
-    public Question showDetail(Integer id){
-        Question question = questionRepository.findById(id).get();
-
-        return question;
+    @RequestMapping("/detail/{id}") // 단건조회
+    public String showDetail(Model model, @PathVariable("id") Integer id){
+        Question question = this.questionService.getQuestion(id);
+        model.addAttribute("question", question);
+        return "QnA/question_detail";
     }
 
 
@@ -105,4 +105,6 @@ public class QuestionController {
 
         return "%d번 게시물을 삭제했습니다.".formatted(id);
     }
+
+
 }
