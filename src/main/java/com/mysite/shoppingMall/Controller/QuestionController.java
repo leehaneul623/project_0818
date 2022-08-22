@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Controller
 @RequestMapping("/question")
@@ -49,9 +48,11 @@ public class QuestionController {
 
     //R 읽기 ==============================================
     @RequestMapping("/list")
-    public String showQuestion(Model model, @RequestParam(value="page", defaultValue="0") int page){
-        Page<Question> paging = this.questionService.getList(page);
+    public String showQuestion(Model model, @RequestParam(value="page", defaultValue="0") int page,
+                               @RequestParam(value = "kw", defaultValue = "") String kw){
+        Page<Question> paging = this.questionService.getList(page, kw);
         model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
         return "QnA/qna.html";
 
     }
@@ -61,13 +62,6 @@ public class QuestionController {
         Question question = this.questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "QnA/question_detail";
-    }
-
-    @GetMapping("/posts/search")
-    public String search(String keyword, Model model){
-        List<Question> questions = questionService.searchSubject(keyword);
-        model.addAttribute("questions", questions);
-        return "QnA/qna.html";
     }
 
 

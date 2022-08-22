@@ -58,8 +58,7 @@
         <div th:if="${!paging.isEmpty()}" class="flex justify-center">
             <ul class="pagination justify-content-center flex justify-between w-72 mt-6">
                 <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="@{|?page=${paging.number-1}|}">
+                    <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
                         <span>이전</span>
                     </a>
                 </li>
@@ -67,10 +66,10 @@
                     th:if="${page >= paging.number-5 and page <= paging.number+5}"
                     th:classappend="${page == paging.number} ? 'active'"
                     class="page-item">
-                    <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                    <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
                 </li>
                 <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
-                    <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                    <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
                         <span>다음</span>
                     </a>
                 </li>
@@ -87,11 +86,27 @@
                     <option value="write_name">작성자</option>
                 </select>
                 <form th:action="@{/question/list}" method="get" id="searchForm">
-                <input class="h-1/2 ml-3 mr-2 border border-gray-500" type="text" name="questionKeyword" placeholder="검색">
-                <button type="submit">
+                <input class="h-1/2 ml-3 mr-2 border border-gray-500" type="text" id="kw" th:value="${kw}" placeholder="검색">
+                    <input type="text" id="page" name="page" th:vlaue="${paging.number}">
+                <button type="submit" id="btn_search">
                     <img src="https://www.boom-style.com/design/kr/board_list_new_c_3_image_url_4.gif" alt="">
                 </button>
                 </form>
+                <script layout:fragment="script" type='text/javascript'>
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value = this.dataset.page;
+        document.getElementById('searchForm').submit();
+    });
+});
+const btn_search = document.getElementById("btn_search");
+btn_search.addEventListener('click', function() {
+    document.getElementById('kw').value = document.getElementById('search_kw').value;
+    document.getElementById('page').value = 0;
+    document.getElementById('searchForm').submit();
+});
+</script>
             </div>
 
             </div>

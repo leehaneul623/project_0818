@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +27,11 @@ public class QuestionService {
 
     private final UserRepository userRepository;
 
-    public Page<Question> getList(int page) {
+    public Page<Question> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("id"));
+        sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.questionRepository.findAll(pageable);
+        return this.questionRepository.findAllByKeyword(kw, pageable);
     }
 
     public void doWrite(String subject, String content, HttpSession session){
@@ -53,9 +52,4 @@ public class QuestionService {
             return question.orElse(null);
     }
 
-    @Transactional
-    public List<Question> searchSubject(String keyword){
-        List<Question> questions = questionRepository.findBySubjectKeyWord(keyword);
-        return questions;
-    }
 }
