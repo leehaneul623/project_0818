@@ -86,10 +86,12 @@
                     <option value="body">내용</option>
                     <option value="write_name">작성자</option>
                 </select>
-                <input class="h-1/2 ml-3 mr-2 border border-gray-500" type="text" placeholder="">
-                <a href="#">
+                <form th:action="@{/question/list}" method="get" id="searchForm">
+                <input class="h-1/2 ml-3 mr-2 border border-gray-500" type="text" name="questionKeyword" placeholder="검색">
+                <button type="submit">
                     <img src="https://www.boom-style.com/design/kr/board_list_new_c_3_image_url_4.gif" alt="">
-                </a>
+                </button>
+                </form>
             </div>
 
             </div>

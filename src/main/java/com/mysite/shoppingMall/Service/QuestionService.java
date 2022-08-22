@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,11 @@ public class QuestionService {
         Optional<Question> question = this.questionRepository.findById(id);
 
             return question.orElse(null);
-
     }
 
+    @Transactional
+    public List<Question> searchSubject(String keyword){
+        List<Question> questions = questionRepository.findBySubjectKeyWord(keyword);
+        return questions;
+    }
 }

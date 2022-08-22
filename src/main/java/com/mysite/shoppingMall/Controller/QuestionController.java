@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @RequestMapping("/question")
@@ -55,12 +56,18 @@ public class QuestionController {
 
     }
 
-
     @RequestMapping("/detail/{id}") // 단건조회
     public String showDetail(Model model, @PathVariable("id") Integer id){
         Question question = this.questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "QnA/question_detail";
+    }
+
+    @GetMapping("/posts/search")
+    public String search(String keyword, Model model){
+        List<Question> questions = questionService.searchSubject(keyword);
+        model.addAttribute("questions", questions);
+        return "QnA/qna.html";
     }
 
 
